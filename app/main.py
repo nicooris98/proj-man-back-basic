@@ -4,6 +4,14 @@ from contextlib import asynccontextmanager
 from app.routes import auth
 from fastapi.middleware.cors import CORSMiddleware
 
+import os
+from dotenv import load_dotenv
+
+# Cargar variables de entorno
+load_dotenv()
+
+FRONT_URL = os.getenv('FRONT_URL')
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("Arrancando app...")
@@ -18,8 +26,8 @@ app.include_router(auth.router)
 # Configurar CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # En producción, reemplazar "*" con dominio frontend
+    allow_origins=[FRONT_URL],
     allow_credentials=True,
-    allow_methods=["*"],  # Permite todos los métodos
+    allow_methods=["*"],  
     allow_headers=["*"],
 )
